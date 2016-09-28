@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+export SOLR_IMAGE=${SOLR_IMAGE:="solr"}
+export SOLR_IMAGE_VERSION=${SOLR_IMAGE_VERSION:="6.2.1"}
+export SOLR_ROOT=${SOLR_ROOT:="/var/lib/dokku/services/solr"}
+
+export PLUGIN_COMMAND_PREFIX="solr"
+export PLUGIN_DATA_ROOT=$SOLR_ROOT
+export PLUGIN_DATASTORE_PORTS=(8983)
+export PLUGIN_DATASTORE_WAIT_PORT=8983
+export PLUGIN_DEFAULT_ALIAS="SOLR"
+export PLUGIN_ALT_ALIAS="DOKKU_SOLR"
+export PLUGIN_IMAGE=$SOLR_IMAGE
+export PLUGIN_IMAGE_VERSION=$SOLR_IMAGE_VERSION
+export PLUGIN_SCHEME="http"
+export PLUGIN_SERVICE="Solr"
+export PLUGIN_BASE_PATH="$PLUGIN_PATH"
+if [[ -n $DOKKU_API_VERSION ]]; then
+  export PLUGIN_BASE_PATH="$PLUGIN_ENABLED_PATH"
+fi
+
+if [[ -d "$PLUGIN_DATA_ROOT/*" ]]; then
+  rm -rf "${PLUGIN_DATA_ROOT:?}/*"
+fi
