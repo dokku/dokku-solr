@@ -24,6 +24,9 @@ service_create() {
   mkdir -p "$SERVICE_ROOT/config" || dokku_log_fail "Unable to create service config directory"
   touch "$LINKS_FILE"
 
+  sudo /bin/chown 8983 "$SERVICE_ROOT/data"
+  sudo /bin/chgrp 8983 "$SERVICE_ROOT/data"
+
   if [[ -n $SOLR_CUSTOM_ENV ]]; then
     echo "$SOLR_CUSTOM_ENV" | tr ';' "\n" > "$SERVICE_ROOT/ENV"
   else
@@ -37,14 +40,11 @@ service_create_container() {
   local SERVICE_ROOT="$PLUGIN_DATA_ROOT/$SERVICE"
   local SERVICE_NAME="$(get_service_name "$SERVICE")"
 
-  ID=$(docker run --name "$SERVICE_NAME" -v "$SERVICE_ROOT/data:/opt/solr/server/solr/$SERVICE" --env-file="$SERVICE_ROOT/ENV" -d --restart always --label dokku=service --label dokku.service=solr "$PLUGIN_IMAGE:$PLUGIN_IMAGE_VERSION")
+  ID=$(docker run --name "$SERVICE_NAME" -v "$SERVICE_ROOT/data:/opt/solr/server/solr/mycores" --env-file="$SERVICE_ROOT/ENV" -d --restart always --label dokku=service --label dokku.service=solr "$PLUGIN_IMAGE:$PLUGIN_IMAGE_VERSION" solr-precreate "$SERVICE")
   echo "$ID" > "$SERVICE_ROOT/ID"
 
   dokku_log_verbose_quiet "Waiting for container to be ready"
   docker run --rm --link "$SERVICE_NAME:$PLUGIN_COMMAND_PREFIX" dokkupaas/wait:0.2 -p "$PLUGIN_DATASTORE_WAIT_PORT" > /dev/null
-
-  dokku_log_verbose_quiet "Creating ${SERVICE_NAME} core"
-  docker exec -it --user=solr "$SERVICE_NAME" bin/solr create_core -c "$SERVICE" > /dev/null
 
   dokku_log_info2 "$PLUGIN_SERVICE container created: $SERVICE"
   service_info "$SERVICE"

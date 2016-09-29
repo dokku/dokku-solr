@@ -15,3 +15,8 @@ pull-docker-image "dokkupaas/wait:0.2"
 
 mkdir -p "$PLUGIN_DATA_ROOT" || echo "Failed to create $PLUGIN_SERVICE directory"
 chown dokku:dokku "$PLUGIN_DATA_ROOT"
+
+echo "%dokku ALL=(ALL) NOPASSWD:/bin/chown 8983 $PLUGIN_DATA_ROOT/*" > /etc/sudoers.d/dokku-solr-chown
+echo "%dokku ALL=(ALL) NOPASSWD:/bin/chgrp 8983 $PLUGIN_DATA_ROOT/*" > /etc/sudoers.d/dokku-solr-chgrp
+chmod 0440 /etc/sudoers.d/dokku-solr-chown
+chmod 0440 /etc/sudoers.d/dokku-solr-chgrp
