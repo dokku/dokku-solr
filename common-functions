@@ -196,8 +196,10 @@ service_link() {
     # shellcheck disable=SC2034
     local passed_phases=(build deploy run)
     add_passed_docker_option passed_phases[@] "--link $SERVICE_NAME:$SERVICE_ALIAS"
+    add_passed_docker_option passed_phases[@] "-v $SERVICE_ROOT/data:/$PLUGIN_COMMAND_PREFIX"
   else
     dokku docker-options:add "$APP" build,deploy,run "--link $SERVICE_NAME:$SERVICE_ALIAS"
+    dokku docker-options:add "$APP" build,deploy,run "-v $SERVICE_ROOT/data:/$PLUGIN_COMMAND_PREFIX"
   fi
   config_set "$APP" "${ALIAS}_URL=$SERVICE_URL"
 }
@@ -389,6 +391,7 @@ service_unlink() {
   local SERVICE_NAME="$(get_service_name "$SERVICE")"
   local EXISTING_CONFIG=$(config_all "$APP")
   local SERVICE_ALIAS=$(service_alias "$SERVICE")
+  local SERVICE_ROOT="$PLUGIN_DATA_ROOT/$SERVICE"
   local LINK=($(echo "$EXISTING_CONFIG" | grep "$SERVICE_URL" | cut -d: -f1)) || true
 
   [[ -z ${LINK[*]} ]] && dokku_log_fail "Not linked to app $APP"
@@ -398,8 +401,10 @@ service_unlink() {
     # shellcheck disable=SC2034
     local passed_phases=(build deploy run)
     remove_passed_docker_option passed_phases[@] "--link $SERVICE_NAME:$SERVICE_ALIAS"
+    remove_passed_docker_option passed_phases[@] "-v $SERVICE_ROOT/data:/$PLUGIN_COMMAND_PREFIX"
   else
     dokku docker-options:remove "$APP" build,deploy,run "--link $SERVICE_NAME:$SERVICE_ALIAS"
+    dokku docker-options:remove "$APP" build,deploy,run "-v $SERVICE_ROOT/data:/$PLUGIN_COMMAND_PREFIX"
   fi
   config_unset "$APP" "${LINK[*]}"
 }
