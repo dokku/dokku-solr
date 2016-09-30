@@ -196,10 +196,8 @@ service_link() {
     # shellcheck disable=SC2034
     local passed_phases=(build deploy run)
     add_passed_docker_option passed_phases[@] "--link $SERVICE_NAME:$SERVICE_ALIAS"
-    add_passed_docker_option passed_phases[@] "-v $SERVICE_ROOT/data:/$PLUGIN_COMMAND_PREFIX"
   else
     dokku docker-options:add "$APP" build,deploy,run "--link $SERVICE_NAME:$SERVICE_ALIAS"
-    dokku docker-options:add "$APP" build,deploy,run "-v $SERVICE_ROOT/data:/$PLUGIN_COMMAND_PREFIX"
   fi
   config_set "$APP" "${ALIAS}_URL=$SERVICE_URL"
 }
