@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/config"
+set -eo pipefail; [[ $DOKKU_TRACE ]] && set -x
+source "$PLUGIN_CORE_AVAILABLE_PATH/common/functions"
+
+solr-pre-build() {
+  declare APP="$1"
+  local LINKED_SERVICES SERVICE SERVICE_CONTAINER_ID SERVICE_ROOT TMPDIR
+
+  LINKED_SERVICES="$(solr-linked-services "$APP")"
+
+  if [[ -z $LINKED_SERVICES ]]; then
+    return
+  fi
+
+  TMPDIR=$(mktemp -d)
+  trap 'rm -rf "$TMP_WORK_DIR" > /dev/null' RETURN
+
+  dokku_log_info1_quiet "Checking for config/solr-schema.xml in repo"
+
+  cd "${TMPDIR}" && git clone -q "${DOKKU_ROOT}/${APP}" repo > /dev/null 2>&1
+
+  if [[ -f "${TMPDIR}/repo/config/solr-schema.xml" ]]; then
+    for SERVICE in $LINKED_SERVICES; do
+      dokku_log_info1_quiet "Copying config/solr-schema.xml to service"
+      SERVICE_ROOT="${PLUGIN_DATA_ROOT}/${SERVICE}"
+      SERVICE_CONTAINER_ID="$(cat "$SERVICE_ROOT/ID")"
+      docker cp "${TMPDIR}/repo/config/solr-schema.xml" "${SERVICE_CONTAINER_ID}:/opt/solr/server/solr/mycores/${SERVICE}/schema.xml"
+      sudo /bin/chown 8983 "${SERVICE_ROOT}/data/${SERVICE}/schema.xml"
+      sudo /bin/chgrp 8983 "${SERVICE_ROOT}/data/${SERVICE}/schema.xml"
+    done
+  fi
+}
+
+solr-linked-services() {
+  declare APP="$1"
+  local LINKS_FILE SERVICES SERVICE_ROOT
+  SERVICES=$(ls "$PLUGIN_DATA_ROOT" 2> /dev/null)
+
+  for SERVICE in $SERVICES; do
+    SERVICE_ROOT="${PLUGIN_DATA_ROOT}/${SERVICE}"
+    LINKS_FILE="${SERVICE_ROOT}/LINKS"
+
+    if grep -Fxq "$APP" "$LINKS_FILE" > /dev/null ; then
+      echo -n "${SERVICE} "
+    fi
+  done
+}
+
+solr-pre-build "$1"
