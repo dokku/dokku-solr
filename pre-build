@@ -16,18 +16,27 @@ solr-pre-build() {
   TMPDIR=$(mktemp -d)
   trap 'rm -rf "$TMP_WORK_DIR" > /dev/null' RETURN
 
-  dokku_log_info1_quiet "Checking for config/solr-schema.xml in repo"
-
   cd "${TMPDIR}" && git clone -q "${DOKKU_ROOT}/${APP}" repo > /dev/null 2>&1
 
-  if [[ -f "${TMPDIR}/repo/config/solr-schema.xml" ]]; then
+  if [[ -f "${TMPDIR}/repo/solr/schema.xml" ]]; then
     for SERVICE in $LINKED_SERVICES; do
-      dokku_log_info1_quiet "Copying config/solr-schema.xml to service"
+      dokku_log_info1_quiet "Copying solr/schema.xml to service conf/schema.xml"
       SERVICE_ROOT="${PLUGIN_DATA_ROOT}/${SERVICE}"
       SERVICE_CONTAINER_ID="$(cat "$SERVICE_ROOT/ID")"
-      docker cp "${TMPDIR}/repo/config/solr-schema.xml" "${SERVICE_CONTAINER_ID}:/opt/solr/server/solr/mycores/${SERVICE}/conf/schema.xml"
+      docker cp "${TMPDIR}/repo/solr/schema.xml" "${SERVICE_CONTAINER_ID}:/opt/solr/server/solr/mycores/${SERVICE}/conf/schema.xml"
       sudo /bin/chown 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/schema.xml"
       sudo /bin/chgrp 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/schema.xml"
+    done
+  fi
+ 
+   if [[ -f "${TMPDIR}/repo/solr/solrconfig.xml" ]]; then
+    for SERVICE in $LINKED_SERVICES; do
+      dokku_log_info1_quiet "Copying solr/solrconfig.xml to service' conf/solrconfig.xml"
+      SERVICE_ROOT="${PLUGIN_DATA_ROOT}/${SERVICE}"
+      SERVICE_CONTAINER_ID="$(cat "$SERVICE_ROOT/ID")"
+      docker cp "${TMPDIR}/repo/solr/solrconfig.xml" "${SERVICE_CONTAINER_ID}:/opt/solr/server/solr/mycores/${SERVICE}/conf/solrconfig.xml"
+      sudo /bin/chown 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/solrconfig.xml"
+      sudo /bin/chgrp 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/solrconfig.xml"
     done
   fi
 }
