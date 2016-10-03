@@ -25,9 +25,9 @@ solr-pre-build() {
       dokku_log_info1_quiet "Copying config/solr-schema.xml to service"
       SERVICE_ROOT="${PLUGIN_DATA_ROOT}/${SERVICE}"
       SERVICE_CONTAINER_ID="$(cat "$SERVICE_ROOT/ID")"
-      docker cp "${TMPDIR}/repo/config/solr-schema.xml" "${SERVICE_CONTAINER_ID}:/opt/solr/server/solr/mycores/${SERVICE}/schema.xml"
-      sudo /bin/chown 8983 "${SERVICE_ROOT}/data/${SERVICE}/schema.xml"
-      sudo /bin/chgrp 8983 "${SERVICE_ROOT}/data/${SERVICE}/schema.xml"
+      docker cp "${TMPDIR}/repo/config/solr-schema.xml" "${SERVICE_CONTAINER_ID}:/opt/solr/server/solr/mycores/${SERVICE}/conf/schema.xml"
+      sudo /bin/chown 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/schema.xml"
+      sudo /bin/chgrp 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/schema.xml"
     done
   fi
 }
