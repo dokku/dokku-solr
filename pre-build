@@ -29,7 +29,7 @@ solr-pre-build() {
     done
   fi
  
-   if [[ -f "${TMPDIR}/repo/solr/solrconfig.xml" ]]; then
+  if [[ -f "${TMPDIR}/repo/solr/solrconfig.xml" ]]; then
     for SERVICE in $LINKED_SERVICES; do
       dokku_log_info1_quiet "Copying solr/solrconfig.xml to service' conf/solrconfig.xml"
       SERVICE_ROOT="${PLUGIN_DATA_ROOT}/${SERVICE}"
