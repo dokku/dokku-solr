@@ -17,6 +17,11 @@ sudo dokku plugin:install https://github.com/dokku/dokku-solr.git solr
 ## commands
 
 ```
+solr:backup <name> <bucket>   NOT IMPLEMENTED
+solr:backup-auth <name> <aws_access_key_id> <aws_secret_access_key> NOT IMPLEMENTED
+solr:backup-deauth <name>     NOT IMPLEMENTED
+solr:backup-schedule <name> <schedule> <bucket> NOT IMPLEMENTED
+solr:backup-unschedule <name> NOT IMPLEMENTED
 solr:clone <name> <new-name>  NOT IMPLEMENTED
 solr:connect <name>           NOT IMPLEMENTED
 solr:create <name>            Create a solr service with environment variables
