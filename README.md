@@ -17,7 +17,7 @@ sudo dokku plugin:install https://github.com/dokku/dokku-solr.git solr
 ## commands
 
 ```
-solr:backup <name> <bucket>   NOT IMPLEMENTED
+solr:backup <name> <bucket> [--use-iam] NOT IMPLEMENTED
 solr:backup-auth <name> <aws_access_key_id> <aws_secret_access_key> (<aws_default_region>) (<aws_signature_version>) (<endpoint_url>) NOT IMPLEMENTED
 solr:backup-deauth <name>     NOT IMPLEMENTED
 solr:backup-schedule <name> <schedule> <bucket> NOT IMPLEMENTED
@@ -58,7 +58,7 @@ dokku solr:create lolipop
 
 # you can also specify custom environment
 # variables to start the solr service
-# in semi-colon separated forma
+# in semi-colon separated form
 export SOLR_CUSTOM_ENV="USER=alpha;HOST=beta"
 dokku solr:create lolipop
 
