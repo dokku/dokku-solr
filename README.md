@@ -25,7 +25,7 @@ solr:backup-unschedule <name> NOT IMPLEMENTED
 solr:clone <name> <new-name>  NOT IMPLEMENTED
 solr:connect <name>           NOT IMPLEMENTED
 solr:create <name>            Create a solr service with environment variables
-solr:destroy <name>           Delete the service and stop its container if there are no links left
+solr:destroy <name>           Delete the service, delete the data and stop its container if there are no links left
 solr:enter <name> [command]   Enter or run a command in a running solr service container
 solr:export <name> > <file>   NOT IMPLEMENTED
 solr:expose <name> [port]     Expose a solr service on custom port if provided (random port otherwise)
