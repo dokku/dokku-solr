@@ -21,7 +21,9 @@ solr:backup <name> <bucket> (--use-iam) NOT IMPLEMENTED
 solr:backup-auth <name> <aws_access_key_id> <aws_secret_access_key> (<aws_default_region>) (<aws_signature_version>) (<endpoint_url>) NOT IMPLEMENTED
 solr:backup-deauth <name>     NOT IMPLEMENTED
 solr:backup-schedule <name> <schedule> <bucket> NOT IMPLEMENTED
+solr:backup-set-encryption <name> <encryption_key>, NOT IMPLEMENTED
 solr:backup-unschedule <name> NOT IMPLEMENTED
+solr:backup-unset-encryption <name>, NOT IMPLEMENTED
 solr:clone <name> <new-name>  NOT IMPLEMENTED
 solr:connect <name>           NOT IMPLEMENTED
 solr:create <name>            Create a solr service with environment variables
