@@ -29,11 +29,13 @@ solr:connect <name>           NOT IMPLEMENTED
 solr:create <name>            Create a solr service with environment variables
 solr:destroy <name>           Delete the service, delete the data and stop its container if there are no links left
 solr:enter <name> [command]   Enter or run a command in a running solr service container
+solr:exists <service>         Check if the solr service exists
 solr:export <name> > <file>   NOT IMPLEMENTED
 solr:expose <name> [port]     Expose a solr service on custom port if provided (random port otherwise)
 solr:import <name> <file>     NOT IMPLEMENTED
 solr:info <name>              Print the connection information
 solr:link <name> <app>        Link the solr service to the app
+solr:linked <name> <app>      Check if the solr service is linked to an app
 solr:list                     List all solr services
 solr:logs <name> [-t]         Print the most recent log(s) for this service
 solr:promote <name> <app>     Promote service <name> as SOLR_URL in <app>
