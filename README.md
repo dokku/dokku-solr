@@ -46,6 +46,7 @@ solr:start <name>             Start a previously stopped solr service
 solr:stop <name>              Stop a running solr service
 solr:unexpose <name>          Unexpose a previously exposed solr service
 solr:unlink <name> <app>      Unlink the solr service from the app
+solr:upgrade <name>           Upgrade service <service> to the specified version
 ```
 
 ## usage
