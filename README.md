@@ -23,7 +23,7 @@ solr:backup-auth <name> <aws_access_key_id> <aws_secret_access_key> (<aws_defaul
 solr:backup-deauth <name>     NOT IMPLEMENTED
 solr:backup-schedule <name> <schedule> <bucket> NOT IMPLEMENTED
 solr:backup-schedule-cat <name> NOT IMPLEMENTED
-solr:backup-set-encryption <name> <encryption_key> NOT IMPLEMENTED
+solr:backup-set-encryption <name> <passphrase> NOT IMPLEMENTED
 solr:backup-unschedule <name> NOT IMPLEMENTED
 solr:backup-unset-encryption <name> NOT IMPLEMENTED
 solr:clone <name> <new-name>  NOT IMPLEMENTED
