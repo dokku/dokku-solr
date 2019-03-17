@@ -4,7 +4,7 @@ Official solr plugin for dokku. Currently defaults to installing [solr 6.2.1](ht
 
 ## requirements
 
-- dokku 0.4.x+
+- dokku 0.12.x+
 - docker 1.8.x
 
 ## installation
