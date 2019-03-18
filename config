@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 export SOLR_IMAGE=${SOLR_IMAGE:="solr"}
 export SOLR_IMAGE_VERSION=${SOLR_IMAGE_VERSION:="6.2.1"}
-export SOLR_ROOT=${SOLR_ROOT:="/var/lib/dokku/services/solr"}
+export SOLR_ROOT=${SOLR_ROOT:="$DOKKU_LIB_ROOT/services/solr"}
 export SOLR_HOST_ROOT=${SOLR_HOST_ROOT:=$SOLR_ROOT}
 
 export PLUGIN_UNIMPLEMENTED_SUBCOMMANDS=("backup" "backup-auth" "backup-deauth" "backup-schedule" "backup-schedule-cat" "backup-set-encryption" "backup-unschedule" "backup-unset-encryption" "clone" "connect" "export" "import")
