@@ -10,7 +10,7 @@ Official solr plugin for dokku. Currently defaults to installing [solr 6.2.1](ht
 ## installation
 
 ```shell
-# on 0.4.x+
+# on 0.12.x+
 sudo dokku plugin:install https://github.com/dokku/dokku-solr.git solr
 ```
 
