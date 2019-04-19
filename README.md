@@ -1,6 +1,6 @@
 # dokku solr [![Build Status](https://img.shields.io/travis/dokku/dokku-solr.svg?branch=master "Build Status")](https://travis-ci.org/dokku/dokku-solr) [![IRC Network](https://img.shields.io/badge/irc-freenode-blue.svg "IRC Freenode")](https://webchat.freenode.net/?channels=dokku)
 
-Official solr plugin for dokku. Currently defaults to installing [solr 6.2.1](https://hub.docker.com/_/solr/).
+Official solr plugin for dokku. Currently defaults to installing [solr 7.7.1](https://hub.docker.com/_/solr/).
 
 ## requirements
 
