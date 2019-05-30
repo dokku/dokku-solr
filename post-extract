@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/config"
-set -eo pipefail; [[ $DOKKU_TRACE ]] && set -x
+set -eo pipefail
+[[ $DOKKU_TRACE ]] && set -x
 source "$PLUGIN_CORE_AVAILABLE_PATH/common/functions"
 
 solr-post-extract() {
@@ -39,13 +40,13 @@ solr-post-extract() {
 solr-linked-services() {
   declare APP="$1"
   local LINKS_FILE SERVICES SERVICE_ROOT
-  SERVICES=$(ls "$PLUGIN_DATA_ROOT" 2> /dev/null)
+  SERVICES=$(ls "$PLUGIN_DATA_ROOT" 2>/dev/null)
 
   for SERVICE in $SERVICES; do
     SERVICE_ROOT="${PLUGIN_DATA_ROOT}/${SERVICE}"
     LINKS_FILE="${SERVICE_ROOT}/LINKS"
 
-    if grep -Fxq "$APP" "$LINKS_FILE" > /dev/null ; then
+    if grep -Fxq "$APP" "$LINKS_FILE" >/dev/null; then
       echo -n "${SERVICE} "
     fi
   done
