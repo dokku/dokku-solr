@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 export SOLR_IMAGE=${SOLR_IMAGE:="solr"}
-export SOLR_IMAGE_VERSION=${SOLR_IMAGE_VERSION:="7.7.1"}
+export SOLR_IMAGE_VERSION=${SOLR_IMAGE_VERSION:="7.7.2"}
 export SOLR_ROOT=${SOLR_ROOT:="$DOKKU_LIB_ROOT/services/solr"}
 export SOLR_HOST_ROOT=${SOLR_HOST_ROOT:=$SOLR_ROOT}
 
