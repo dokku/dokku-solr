@@ -14,25 +14,14 @@ solr-post-extract() {
     return
   fi
 
-  if [[ -f "${TMPDIR}/solr/schema.xml" ]]; then
+  if [[ -d "${TMPDIR}/solr" ]]; then
     for SERVICE in $LINKED_SERVICES; do
-      dokku_log_info1_quiet "Copying solr/schema.xml to service conf/schema.xml"
+      dokku_log_info1_quiet "Copying solr to service conf"
       SERVICE_ROOT="${PLUGIN_DATA_ROOT}/${SERVICE}"
       SERVICE_CONTAINER_ID="$(cat "$SERVICE_ROOT/ID")"
-      docker cp "${TMPDIR}/solr/schema.xml" "${SERVICE_CONTAINER_ID}:/opt/solr/server/solr/mycores/${SERVICE}/conf/schema.xml"
-      sudo /bin/chown 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/schema.xml"
-      sudo /bin/chgrp 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/schema.xml"
-    done
-  fi
-
-  if [[ -f "${TMPDIR}/solr/solrconfig.xml" ]]; then
-    for SERVICE in $LINKED_SERVICES; do
-      dokku_log_info1_quiet "Copying solr/solrconfig.xml to service' conf/solrconfig.xml"
-      SERVICE_ROOT="${PLUGIN_DATA_ROOT}/${SERVICE}"
-      SERVICE_CONTAINER_ID="$(cat "$SERVICE_ROOT/ID")"
-      docker cp "${TMPDIR}/solr/solrconfig.xml" "${SERVICE_CONTAINER_ID}:/opt/solr/server/solr/mycores/${SERVICE}/conf/solrconfig.xml"
-      sudo /bin/chown 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/solrconfig.xml"
-      sudo /bin/chgrp 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/solrconfig.xml"
+      for f in ${TMPDIR}/solr/*; do docker cp $f "${SERVICE_CONTAINER_ID}:/opt/solr/server/solr/mycores/${SERVICE}/conf/"; done
+      sudo /bin/chown 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/"*
+      sudo /bin/chgrp 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/"*
     done
   fi
 }

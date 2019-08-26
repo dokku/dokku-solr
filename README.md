@@ -183,6 +183,10 @@ OR
 - Change SOLR_DATABASE_SCHEME to the desired setting
 - Relink the service
 
+## Core settings
+
+You can configure the solr core adding files to `/solr` directory in your application. Fore example, files like `protwords.txt`, `solrconfig.xml` and other schema extra files.
+
 ## Disabling `docker pull` calls
 
 If you wish to disable the `docker pull` calls that the plugin triggers, you may set the `SOLR_DISABLE_PULL` environment variable to `true`. Once disabled, you will need to pull the service image you wish to deploy as shown in the `stderr` output.
