@@ -65,15 +65,15 @@ Create a solr service named lolipop:
 dokku solr:create lolipop
 ```
 
-You can also specify the image and image version to use for the service. It *must* be compatible with the ${plugin_image} image.
+You can also specify the image and image version to use for the service. It *must* be compatible with the solr image. 
 
 ```shell
-export SOLR_IMAGE="${PLUGIN_IMAGE}"
+export SOLR_IMAGE="solr"
 export SOLR_IMAGE_VERSION="${PLUGIN_IMAGE_VERSION}"
 dokku solr:create lolipop
 ```
 
-You can also specify custom environment variables to start the solr service in semi-colon separated form.
+You can also specify custom environment variables to start the solr service in semi-colon separated form. 
 
 ```shell
 export SOLR_CUSTOM_ENV="USER=alpha;HOST=beta"
@@ -169,7 +169,7 @@ flags:
 - `-a|--alias "BLUE_DATABASE"`: an alternative alias to use for linking to an app via environment variable
 - `-q|--querystring "pool=5"`: ampersand delimited querystring arguments to append to the service link
 
-A solr service can be linked to a container. This will use native docker links via the docker-options plugin. Here we link it to our 'playground' app.
+A solr service can be linked to a container. This will use native docker links via the docker-options plugin. Here we link it to our 'playground' app. 
 
 > NOTE: this will restart your app
 
@@ -200,14 +200,14 @@ The host exposed here only works internally in docker containers. If you want yo
 dokku solr:link other_service playground
 ```
 
-It is possible to change the protocol for solr_url by setting the environment variable solr_database_scheme on the app. Doing so will after linking will cause the plugin to think the service is not linked, and we advise you to unlink before proceeding.
+It is possible to change the protocol for `SOLR_URL` by setting the environment variable `SOLR_DATABASE_SCHEME` on the app. Doing so will after linking will cause the plugin to think the service is not linked, and we advise you to unlink before proceeding. 
 
 ```shell
 dokku config:set playground SOLR_DATABASE_SCHEME=http2
 dokku solr:link lolipop playground
 ```
 
-This will cause solr_url to be set as:
+This will cause `SOLR_URL` to be set as:
 
 ```
 http2://lolipop:SOME_PASSWORD@dokku-solr-lolipop:8983/lolipop
@@ -239,13 +239,13 @@ The lifecycle of each service can be managed through the following commands:
 dokku solr:enter <service>
 ```
 
-A bash prompt can be opened against a running service. Filesystem changes will not be saved to disk.
+A bash prompt can be opened against a running service. Filesystem changes will not be saved to disk. 
 
 ```shell
 dokku solr:enter lolipop
 ```
 
-You may also run a command directly against the service. Filesystem changes will not be saved to disk.
+You may also run a command directly against the service. Filesystem changes will not be saved to disk. 
 
 ```shell
 dokku solr:enter lolipop touch /tmp/test
@@ -258,10 +258,10 @@ dokku solr:enter lolipop touch /tmp/test
 dokku solr:expose <service> <ports...>
 ```
 
-Expose the service on the service's normal ports, allowing access to it from the public interface (0. 0. 0. 0):
+Expose the service on the service's normal ports, allowing access to it from the public interface (`0.0.0.0`):
 
 ```shell
-dokku solr:expose lolipop ${PLUGIN_DATASTORE_PORTS[@]}
+dokku solr:expose lolipop 8983
 ```
 
 ### unexpose a previously exposed solr service
@@ -271,7 +271,7 @@ dokku solr:expose lolipop ${PLUGIN_DATASTORE_PORTS[@]}
 dokku solr:unexpose <service>
 ```
 
-Unexpose the service, removing access to it from the public interface (0. 0. 0. 0):
+Unexpose the service, removing access to it from the public interface (`0.0.0.0`):
 
 ```shell
 dokku solr:unexpose lolipop
@@ -298,7 +298,7 @@ You can promote the new service to be the primary one:
 dokku solr:promote other_service playground
 ```
 
-This will replace solr_url with the url from other_service and generate another environment variable to hold the previous value if necessary. You could end up with the following for example:
+This will replace `SOLR_URL` with the url from other_service and generate another environment variable to hold the previous value if necessary. You could end up with the following for example:
 
 ```
 SOLR_URL=http://other_service:ANOTHER_PASSWORD@dokku-solr-other-service:8983/other_service
@@ -376,7 +376,7 @@ Service scripting can be executed using the following commands:
 dokku solr:app-links <app>
 ```
 
-List all solr services that are linked to the 'playground' app.
+List all solr services that are linked to the 'playground' app. 
 
 ```shell
 dokku solr:app-links playground
@@ -389,7 +389,7 @@ dokku solr:app-links playground
 dokku solr:exists <service>
 ```
 
-Here we check if the lolipop solr service exists.
+Here we check if the lolipop solr service exists. 
 
 ```shell
 dokku solr:exists lolipop
@@ -402,7 +402,7 @@ dokku solr:exists lolipop
 dokku solr:linked <service> <app>
 ```
 
-Here we check if the lolipop solr service is linked to the 'playground' app.
+Here we check if the lolipop solr service is linked to the 'playground' app. 
 
 ```shell
 dokku solr:linked lolipop playground
@@ -415,7 +415,7 @@ dokku solr:linked lolipop playground
 dokku solr:links <service>
 ```
 
-List all apps linked to the 'lolipop' solr service.
+List all apps linked to the 'lolipop' solr service. 
 
 ```shell
 dokku solr:links lolipop
