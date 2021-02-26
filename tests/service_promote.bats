@@ -3,14 +3,14 @@ load test_helper
 
 setup() {
   dokku "$PLUGIN_COMMAND_PREFIX:create" l
-  dokku apps:create my_app
-  dokku "$PLUGIN_COMMAND_PREFIX:link" l my_app
+  dokku apps:create my-app
+  dokku "$PLUGIN_COMMAND_PREFIX:link" l my-app
 }
 
 teardown() {
-  dokku "$PLUGIN_COMMAND_PREFIX:unlink" l my_app
+  dokku "$PLUGIN_COMMAND_PREFIX:unlink" l my-app
   dokku --force "$PLUGIN_COMMAND_PREFIX:destroy" l
-  dokku --force apps:destroy my_app
+  dokku --force apps:destroy my-app
 }
 
 @test "($PLUGIN_COMMAND_PREFIX:promote) error when there are no arguments" {
@@ -29,32 +29,32 @@ teardown() {
 }
 
 @test "($PLUGIN_COMMAND_PREFIX:promote) error when the service does not exist" {
-  run dokku "$PLUGIN_COMMAND_PREFIX:promote" not_existing_service my_app
+  run dokku "$PLUGIN_COMMAND_PREFIX:promote" not_existing_service my-app
   assert_contains "${lines[*]}" "service not_existing_service does not exist"
 }
 
 @test "($PLUGIN_COMMAND_PREFIX:promote) error when the service is already promoted" {
-  run dokku "$PLUGIN_COMMAND_PREFIX:promote" l my_app
+  run dokku "$PLUGIN_COMMAND_PREFIX:promote" l my-app
   assert_contains "${lines[*]}" "already promoted as SOLR_URL"
 }
 
 @test "($PLUGIN_COMMAND_PREFIX:promote) changes SOLR_URL" {
-  dokku config:set my_app "SOLR_URL=http://u:p@host:8983/db" "DOKKU_SOLR_BLUE_URL=http://dokku-solr-l:8983/solr/l"
-  dokku "$PLUGIN_COMMAND_PREFIX:promote" l my_app
-  url=$(dokku config:get my_app SOLR_URL)
+  dokku config:set my-app "SOLR_URL=http://u:p@host:8983/db" "DOKKU_SOLR_BLUE_URL=http://dokku-solr-l:8983/solr/l"
+  dokku "$PLUGIN_COMMAND_PREFIX:promote" l my-app
+  url=$(dokku config:get my-app SOLR_URL)
   assert_equal "$url" "http://dokku-solr-l:8983/solr/l"
 }
 
 @test "($PLUGIN_COMMAND_PREFIX:promote) creates new config url when needed" {
-  dokku config:set my_app "SOLR_URL=http://u:p@host:8983/db" "DOKKU_SOLR_BLUE_URL=http://dokku-solr-l:8983/solr/l"
-  dokku "$PLUGIN_COMMAND_PREFIX:promote" l my_app
-  run dokku config my_app
+  dokku config:set my-app "SOLR_URL=http://u:p@host:8983/db" "DOKKU_SOLR_BLUE_URL=http://dokku-solr-l:8983/solr/l"
+  dokku "$PLUGIN_COMMAND_PREFIX:promote" l my-app
+  run dokku config my-app
   assert_contains "${lines[*]}" "DOKKU_SOLR_"
 }
 
 @test "($PLUGIN_COMMAND_PREFIX:promote) uses SOLR_DATABASE_SCHEME variable" {
-  dokku config:set my_app "SOLR_DATABASE_SCHEME=solr2" "SOLR_URL=http://host:8983" "DOKKU_SOLR_BLUE_URL=solr2://dokku-solr-l:8983/solr/l"
-  dokku "$PLUGIN_COMMAND_PREFIX:promote" l my_app
-  url=$(dokku config:get my_app SOLR_URL)
+  dokku config:set my-app "SOLR_DATABASE_SCHEME=solr2" "SOLR_URL=http://host:8983" "DOKKU_SOLR_BLUE_URL=solr2://dokku-solr-l:8983/solr/l"
+  dokku "$PLUGIN_COMMAND_PREFIX:promote" l my-app
+  url=$(dokku config:get my-app SOLR_URL)
   assert_equal "$url" "solr2://dokku-solr-l:8983/solr/l"
 }
