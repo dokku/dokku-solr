@@ -67,7 +67,7 @@ service_create_container() {
   local SERVICE_NAME="$(get_service_name "$SERVICE")"
   local DATABASE_NAME="$(get_database_name "$SERVICE")"
 
-  ID=$(docker run --name "$SERVICE_NAME" -v "$SERVICE_HOST_ROOT/data:/opt/solr/server/solr/mycores" --env-file="$SERVICE_ROOT/ENV" -d --restart always --label dokku=service --label dokku.service=solr "$PLUGIN_IMAGE:$PLUGIN_IMAGE_VERSION" solr-precreate "$DATABASE_NAME")
+  ID=$(docker run --name "$SERVICE_NAME" -v "$SERVICE_HOST_ROOT/data:/var/solr/data" --env-file="$SERVICE_ROOT/ENV" -d --restart always --label dokku=service --label dokku.service=solr "$PLUGIN_IMAGE:$PLUGIN_IMAGE_VERSION" solr-precreate "$DATABASE_NAME")
   echo "$ID" >"$SERVICE_ROOT/ID"
 
   dokku_log_verbose_quiet "Waiting for container to be ready"
