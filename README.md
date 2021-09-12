@@ -22,7 +22,7 @@ solr:create <service> [--create-flags...]   # create a solr service
 solr:destroy <service> [-f|--force]         # delete the solr service/data/container if there are no links left
 solr:enter <service>                        # enter or run a command in a running solr service container
 solr:exists <service>                       # check if the solr service exists
-solr:expose <service> <ports...>            # expose a solr service on custom port if provided (random port otherwise)
+solr:expose <service> <ports...>            # expose a solr service on custom host:port if provided (random port on the 0.0.0.0 interface if otherwise unspecified)
 solr:info <service> [--single-info-flag]    # print the service information
 solr:link <service> <app> [--link-flags...] # link the solr service to the app
 solr:linked <service> <app>                 # check if the solr service is linked to an app
@@ -251,7 +251,7 @@ You may also run a command directly against the service. Filesystem changes will
 dokku solr:enter lolipop touch /tmp/test
 ```
 
-### expose a solr service on custom port if provided (random port otherwise)
+### expose a solr service on custom host:port if provided (random port on the 0.0.0.0 interface if otherwise unspecified)
 
 ```shell
 # usage
@@ -262,6 +262,12 @@ Expose the service on the service's normal ports, allowing access to it from the
 
 ```shell
 dokku solr:expose lolipop 8983
+```
+
+Expose the service on the service's normal ports, with the first on a specified ip adddress (127.0.0.1):
+
+```shell
+dokku solr:expose lolipop 127.0.0.1:8983
 ```
 
 ### unexpose a previously exposed solr service
