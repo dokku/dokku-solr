@@ -16,10 +16,16 @@ solr-post-extract() {
 
   if [[ -f "${TMPDIR}/solr/schema.xml" ]]; then
     for SERVICE in $LINKED_SERVICES; do
-      dokku_log_info1_quiet "Copying solr/schema.xml to service conf/schema.xml"
+      MAJOR_VERSION="$(docker inspect --format '{{ index .Config.Labels "com.dokku.solr/major-version"}}' "dokku.solr.$SERVICE" 2>/dev/null || true)"
+      local CONTAINER_PATH="/opt/solr/server/solr/mycores"
+      if [[ -N "$SOLR_MAJOR_VERSION" ]] && [[ "$SOLR_MAJOR_VERSION" -ge 8 ]]; then
+        CONTAINER_PATH=/var/solr/data
+      fi
+
+      dokku_log_info1_quiet "Copying solr/schema.xml to service $CONTAINER_PATH/conf/schema.xml"
       SERVICE_ROOT="${PLUGIN_DATA_ROOT}/${SERVICE}"
       SERVICE_CONTAINER_ID="$(cat "$SERVICE_ROOT/ID")"
-      docker cp "${TMPDIR}/solr/schema.xml" "${SERVICE_CONTAINER_ID}:/opt/solr/server/solr/mycores/${SERVICE}/conf/schema.xml"
+      docker cp "${TMPDIR}/solr/schema.xml" "${SERVICE_CONTAINER_ID}:$CONTAINER_PATH/${SERVICE}/conf/schema.xml"
       sudo /bin/chown 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/schema.xml"
       sudo /bin/chgrp 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/schema.xml"
     done
@@ -27,10 +33,16 @@ solr-post-extract() {
 
   if [[ -f "${TMPDIR}/solr/solrconfig.xml" ]]; then
     for SERVICE in $LINKED_SERVICES; do
-      dokku_log_info1_quiet "Copying solr/solrconfig.xml to service' conf/solrconfig.xml"
+      MAJOR_VERSION="$(docker inspect --format '{{ index .Config.Labels "com.dokku.solr/major-version"}}' "dokku.solr.$SERVICE" 2>/dev/null || true)"
+      local CONTAINER_PATH="/opt/solr/server/solr/mycores"
+      if [[ -N "$SOLR_MAJOR_VERSION" ]] && [[ "$SOLR_MAJOR_VERSION" -ge 8 ]]; then
+        CONTAINER_PATH=/var/solr/data
+      fi
+
+      dokku_log_info1_quiet "Copying solr/solrconfig.xml to service $CONTAINER_PATH/conf/solrconfig.xml"
       SERVICE_ROOT="${PLUGIN_DATA_ROOT}/${SERVICE}"
       SERVICE_CONTAINER_ID="$(cat "$SERVICE_ROOT/ID")"
-      docker cp "${TMPDIR}/solr/solrconfig.xml" "${SERVICE_CONTAINER_ID}:/opt/solr/server/solr/mycores/${SERVICE}/conf/solrconfig.xml"
+      docker cp "${TMPDIR}/solr/solrconfig.xml" "${SERVICE_CONTAINER_ID}:$CONTAINER_PATH/${SERVICE}/conf/solrconfig.xml"
       sudo /bin/chown 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/solrconfig.xml"
       sudo /bin/chgrp 8983 "${SERVICE_ROOT}/data/${SERVICE}/conf/solrconfig.xml"
     done

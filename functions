@@ -67,8 +67,16 @@ service_create_container() {
   local SERVICE_NAME="$(get_service_name "$SERVICE")"
   local DATABASE_NAME="$(get_database_name "$SERVICE")"
 
-  ID=$(docker run --name "$SERVICE_NAME" -v "$SERVICE_HOST_ROOT/data:/opt/solr/server/solr/mycores" --env-file="$SERVICE_ROOT/ENV" -d --restart always --label dokku=service --label dokku.service=solr "$PLUGIN_IMAGE:$PLUGIN_IMAGE_VERSION" solr-precreate "$DATABASE_NAME")
+  set -x
+  local SOLR_MAJOR_VERSION=$(echo "$PLUGIN_IMAGE_VERSION" | cut -d '.' -f 1)
+  local CONTAINER_PATH="/opt/solr/server/solr/mycores"
+  if [[ "$SOLR_MAJOR_VERSION" -ge 8 ]]; then
+    CONTAINER_PATH=/var/solr/data
+  fi
+
+  ID=$(docker run --name "$SERVICE_NAME" -v "$SERVICE_HOST_ROOT/data:$CONTAINER_PATH" --env-file="$SERVICE_ROOT/ENV" -d --restart always --label dokku=service --label dokku.service=solr --label com.dokku.solr/major-version=$SOLR_MAJOR_VERSION "$PLUGIN_IMAGE:$PLUGIN_IMAGE_VERSION" solr-precreate "$DATABASE_NAME")
   echo "$ID" >"$SERVICE_ROOT/ID"
+  set +x
 
   dokku_log_verbose_quiet "Waiting for container to be ready"
   docker run --rm --link "$SERVICE_NAME:$PLUGIN_COMMAND_PREFIX" "$PLUGIN_WAIT_IMAGE" -p "$PLUGIN_DATASTORE_WAIT_PORT" >/dev/null
