@@ -74,7 +74,7 @@ service_create_container() {
     CONTAINER_PATH=/var/solr/data
   fi
 
-  ID=$(docker run --name "$SERVICE_NAME" -v "$SERVICE_HOST_ROOT/data:$CONTAINER_PATH" --env-file="$SERVICE_ROOT/ENV" -d --restart always --label dokku=service --label dokku.service=solr --label com.dokku.solr/major-version=$SOLR_MAJOR_VERSION "$PLUGIN_IMAGE:$PLUGIN_IMAGE_VERSION" solr-precreate "$DATABASE_NAME")
+  ID=$(docker run --name "$SERVICE_NAME" -v "$SERVICE_HOST_ROOT/data:$CONTAINER_PATH" --env-file="$SERVICE_ROOT/ENV" -d --restart always --label dokku=service --label dokku.service=solr "$PLUGIN_IMAGE:$PLUGIN_IMAGE_VERSION" solr-precreate "$DATABASE_NAME")
   echo "$ID" >"$SERVICE_ROOT/ID"
   set +x
 
