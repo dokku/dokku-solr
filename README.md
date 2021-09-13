@@ -62,10 +62,10 @@ flags:
 - `-r|--root-password PASSWORD`: override the root-level service password
 - `-s|--shm-size SHM_SIZE`: override shared memory size for solr docker container
 
-Create a solr service named lolipop:
+Create a solr service named lollipop:
 
 ```shell
-dokku solr:create lolipop
+dokku solr:create lollipop
 ```
 
 You can also specify the image and image version to use for the service. It *must* be compatible with the solr image.
@@ -73,14 +73,14 @@ You can also specify the image and image version to use for the service. It *mus
 ```shell
 export SOLR_IMAGE="solr"
 export SOLR_IMAGE_VERSION="${PLUGIN_IMAGE_VERSION}"
-dokku solr:create lolipop
+dokku solr:create lollipop
 ```
 
 You can also specify custom environment variables to start the solr service in semi-colon separated form.
 
 ```shell
 export SOLR_CUSTOM_ENV="USER=alpha;HOST=beta"
-dokku solr:create lolipop
+dokku solr:create lollipop
 ```
 
 ### print the service information
@@ -106,22 +106,22 @@ flags:
 Get connection information as follows:
 
 ```shell
-dokku solr:info lolipop
+dokku solr:info lollipop
 ```
 
 You can also retrieve a specific piece of service info via flags:
 
 ```shell
-dokku solr:info lolipop --config-dir
-dokku solr:info lolipop --data-dir
-dokku solr:info lolipop --dsn
-dokku solr:info lolipop --exposed-ports
-dokku solr:info lolipop --id
-dokku solr:info lolipop --internal-ip
-dokku solr:info lolipop --links
-dokku solr:info lolipop --service-root
-dokku solr:info lolipop --status
-dokku solr:info lolipop --version
+dokku solr:info lollipop --config-dir
+dokku solr:info lollipop --data-dir
+dokku solr:info lollipop --dsn
+dokku solr:info lollipop --exposed-ports
+dokku solr:info lollipop --id
+dokku solr:info lollipop --internal-ip
+dokku solr:info lollipop --links
+dokku solr:info lollipop --service-root
+dokku solr:info lollipop --status
+dokku solr:info lollipop --version
 ```
 
 ### list all solr services
@@ -151,13 +151,13 @@ flags:
 You can tail logs for a particular service:
 
 ```shell
-dokku solr:logs lolipop
+dokku solr:logs lollipop
 ```
 
 By default, logs will not be tailed, but you can do this with the --tail flag:
 
 ```shell
-dokku solr:logs lolipop --tail
+dokku solr:logs lollipop --tail
 ```
 
 ### link the solr service to the app
@@ -177,24 +177,24 @@ A solr service can be linked to a container. This will use native docker links v
 > NOTE: this will restart your app
 
 ```shell
-dokku solr:link lolipop playground
+dokku solr:link lollipop playground
 ```
 
 The following environment variables will be set automatically by docker (not on the app itself, so they won’t be listed when calling dokku config):
 
 ```
-DOKKU_SOLR_LOLIPOP_NAME=/lolipop/DATABASE
-DOKKU_SOLR_LOLIPOP_PORT=tcp://172.17.0.1:8983
-DOKKU_SOLR_LOLIPOP_PORT_8983_TCP=tcp://172.17.0.1:8983
-DOKKU_SOLR_LOLIPOP_PORT_8983_TCP_PROTO=tcp
-DOKKU_SOLR_LOLIPOP_PORT_8983_TCP_PORT=8983
-DOKKU_SOLR_LOLIPOP_PORT_8983_TCP_ADDR=172.17.0.1
+DOKKU_SOLR_LOLLIPOP_NAME=/lollipop/DATABASE
+DOKKU_SOLR_LOLLIPOP_PORT=tcp://172.17.0.1:8983
+DOKKU_SOLR_LOLLIPOP_PORT_8983_TCP=tcp://172.17.0.1:8983
+DOKKU_SOLR_LOLLIPOP_PORT_8983_TCP_PROTO=tcp
+DOKKU_SOLR_LOLLIPOP_PORT_8983_TCP_PORT=8983
+DOKKU_SOLR_LOLLIPOP_PORT_8983_TCP_ADDR=172.17.0.1
 ```
 
 The following will be set on the linked application by default:
 
 ```
-SOLR_URL=http://dokku-solr-lolipop:8983/solr/lolipop
+SOLR_URL=http://dokku-solr-lollipop:8983/solr/lollipop
 ```
 
 The host exposed here only works internally in docker containers. If you want your container to be reachable from outside, you should use the `expose` subcommand. Another service can be linked to your app:
@@ -207,13 +207,13 @@ It is possible to change the protocol for `SOLR_URL` by setting the environment 
 
 ```shell
 dokku config:set playground SOLR_DATABASE_SCHEME=http2
-dokku solr:link lolipop playground
+dokku solr:link lollipop playground
 ```
 
 This will cause `SOLR_URL` to be set as:
 
 ```
-http2://dokku-solr-lolipop:8983/solr/lolipop
+http2://dokku-solr-lollipop:8983/solr/lollipop
 ```
 
 ### unlink the solr service from the app
@@ -228,7 +228,7 @@ You can unlink a solr service:
 > NOTE: this will restart your app and unset related environment variables
 
 ```shell
-dokku solr:unlink lolipop playground
+dokku solr:unlink lollipop playground
 ```
 
 ### Service Lifecycle
@@ -245,13 +245,13 @@ dokku solr:enter <service>
 A bash prompt can be opened against a running service. Filesystem changes will not be saved to disk.
 
 ```shell
-dokku solr:enter lolipop
+dokku solr:enter lollipop
 ```
 
 You may also run a command directly against the service. Filesystem changes will not be saved to disk.
 
 ```shell
-dokku solr:enter lolipop touch /tmp/test
+dokku solr:enter lollipop touch /tmp/test
 ```
 
 ### expose a solr service on custom host:port if provided (random port on the 0.0.0.0 interface if otherwise unspecified)
@@ -264,13 +264,13 @@ dokku solr:expose <service> <ports...>
 Expose the service on the service's normal ports, allowing access to it from the public interface (`0.0.0.0`):
 
 ```shell
-dokku solr:expose lolipop 8983
+dokku solr:expose lollipop 8983
 ```
 
 Expose the service on the service's normal ports, with the first on a specified ip adddress (127.0.0.1):
 
 ```shell
-dokku solr:expose lolipop 127.0.0.1:8983
+dokku solr:expose lollipop 127.0.0.1:8983
 ```
 
 ### unexpose a previously exposed solr service
@@ -283,7 +283,7 @@ dokku solr:unexpose <service>
 Unexpose the service, removing access to it from the public interface (`0.0.0.0`):
 
 ```shell
-dokku solr:unexpose lolipop
+dokku solr:unexpose lollipop
 ```
 
 ### promote service <service> as SOLR_URL in <app>
@@ -312,7 +312,7 @@ This will replace `SOLR_URL` with the url from other_service and generate anothe
 ```
 SOLR_URL=http://other_service:ANOTHER_PASSWORD@dokku-solr-other-service:8983/other_service
 DOKKU_SOLR_BLUE_URL=http://other_service:ANOTHER_PASSWORD@dokku-solr-other-service:8983/other_service
-DOKKU_SOLR_SILVER_URL=http://lolipop:SOME_PASSWORD@dokku-solr-lolipop:8983/lolipop
+DOKKU_SOLR_SILVER_URL=http://lollipop:SOME_PASSWORD@dokku-solr-lollipop:8983/lollipop
 ```
 
 ### start a previously stopped solr service
@@ -325,7 +325,7 @@ dokku solr:start <service>
 Start the service:
 
 ```shell
-dokku solr:start lolipop
+dokku solr:start lollipop
 ```
 
 ### stop a running solr service
@@ -338,7 +338,7 @@ dokku solr:stop <service>
 Stop the service and the running container:
 
 ```shell
-dokku solr:stop lolipop
+dokku solr:stop lollipop
 ```
 
 ### graceful shutdown and restart of the solr service container
@@ -351,7 +351,7 @@ dokku solr:restart <service>
 Restart the service:
 
 ```shell
-dokku solr:restart lolipop
+dokku solr:restart lollipop
 ```
 
 ### upgrade service <service> to the specified versions
@@ -373,7 +373,7 @@ flags:
 You can upgrade an existing service to a new image or image-version:
 
 ```shell
-dokku solr:upgrade lolipop
+dokku solr:upgrade lollipop
 ```
 
 ### Service Automation
@@ -400,10 +400,10 @@ dokku solr:app-links playground
 dokku solr:exists <service>
 ```
 
-Here we check if the lolipop solr service exists.
+Here we check if the lollipop solr service exists.
 
 ```shell
-dokku solr:exists lolipop
+dokku solr:exists lollipop
 ```
 
 ### check if the solr service is linked to an app
@@ -413,10 +413,10 @@ dokku solr:exists lolipop
 dokku solr:linked <service> <app>
 ```
 
-Here we check if the lolipop solr service is linked to the `playground` app.
+Here we check if the lollipop solr service is linked to the `playground` app.
 
 ```shell
-dokku solr:linked lolipop playground
+dokku solr:linked lollipop playground
 ```
 
 ### list all apps linked to the solr service
@@ -426,10 +426,10 @@ dokku solr:linked lolipop playground
 dokku solr:links <service>
 ```
 
-List all apps linked to the `lolipop` solr service.
+List all apps linked to the `lollipop` solr service.
 
 ```shell
-dokku solr:links lolipop
+dokku solr:links lollipop
 ```
 
 ### Disabling `docker pull` calls
