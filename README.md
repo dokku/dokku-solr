@@ -193,7 +193,7 @@ DOKKU_SOLR_LOLIPOP_PORT_8983_TCP_ADDR=172.17.0.1
 The following will be set on the linked application by default:
 
 ```
-SOLR_URL=http://lolipop:SOME_PASSWORD@dokku-solr-lolipop:8983/lolipop
+SOLR_URL=http://dokku-solr-lolipop:8983/solr/lolipop
 ```
 
 The host exposed here only works internally in docker containers. If you want your container to be reachable from outside, you should use the `expose` subcommand. Another service can be linked to your app:
@@ -212,7 +212,7 @@ dokku solr:link lolipop playground
 This will cause `SOLR_URL` to be set as:
 
 ```
-http2://lolipop:SOME_PASSWORD@dokku-solr-lolipop:8983/lolipop
+http2://dokku-solr-lolipop:8983/solr/lolipop
 ```
 
 ### unlink the solr service from the app
