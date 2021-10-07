@@ -1,6 +1,6 @@
 # dokku solr [![Build Status](https://img.shields.io/github/workflow/status/dokku/dokku-solr/CI/master?style=flat-square "Build Status")](https://github.com/dokku/dokku-solr/actions/workflows/ci.yml?query=branch%3Amaster) [![IRC Network](https://img.shields.io/badge/irc-libera-blue.svg?style=flat-square "IRC Libera")](https://webchat.libera.chat/?channels=dokku)
 
-Official solr plugin for dokku. Currently defaults to installing [solr 8.9.0](https://hub.docker.com/_/solr/).
+Official solr plugin for dokku. Currently defaults to installing [solr 8.10.0](https://hub.docker.com/_/solr/).
 
 ## Requirements
 
