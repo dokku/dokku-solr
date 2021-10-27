@@ -17,25 +17,25 @@ sudo dokku plugin:install https://github.com/dokku/dokku-solr.git solr
 ## Commands
 
 ```
-solr:app-links <app>                        # list all solr service links for a given app
-solr:create <service> [--create-flags...]   # create a solr service
-solr:destroy <service> [-f|--force]         # delete the solr service/data/container if there are no links left
-solr:enter <service>                        # enter or run a command in a running solr service container
-solr:exists <service>                       # check if the solr service exists
-solr:expose <service> <ports...>            # expose a solr service on custom host:port if provided (random port on the 0.0.0.0 interface if otherwise unspecified)
-solr:info <service> [--single-info-flag]    # print the service information
-solr:link <service> <app> [--link-flags...] # link the solr service to the app
-solr:linked <service> <app>                 # check if the solr service is linked to an app
-solr:links <service>                        # list all apps linked to the solr service
-solr:list                                   # list all solr services
-solr:logs <service> [-t|--tail]             # print the most recent log(s) for this service
-solr:promote <service> <app>                # promote service <service> as SOLR_URL in <app>
-solr:restart <service>                      # graceful shutdown and restart of the solr service container
-solr:start <service>                        # start a previously stopped solr service
-solr:stop <service>                         # stop a running solr service
-solr:unexpose <service>                     # unexpose a previously exposed solr service
-solr:unlink <service> <app>                 # unlink the solr service from the app
-solr:upgrade <service> [--upgrade-flags...] # upgrade service <service> to the specified versions
+solr:app-links <app>                               # list all solr service links for a given app
+solr:create <service> [--create-flags...]          # create a solr service
+solr:destroy <service> [-f|--force]                # delete the solr service/data/container if there are no links left
+solr:enter <service>                               # enter or run a command in a running solr service container
+solr:exists <service>                              # check if the solr service exists
+solr:expose <service> <ports...>                   # expose a solr service on custom host:port if provided (random port on the 0.0.0.0 interface if otherwise unspecified)
+solr:info <service> [--single-info-flag]           # print the service information
+solr:link <service> <app> [--link-flags...]        # link the solr service to the app
+solr:linked <service> <app>                        # check if the solr service is linked to an app
+solr:links <service>                               # list all apps linked to the solr service
+solr:list                                          # list all solr services
+solr:logs <service> [-t|--tail] <tail-num-optional> # print the most recent log(s) for this service
+solr:promote <service> <app>                       # promote service <service> as SOLR_URL in <app>
+solr:restart <service>                             # graceful shutdown and restart of the solr service container
+solr:start <service>                               # start a previously stopped solr service
+solr:stop <service>                                # stop a running solr service
+solr:unexpose <service>                            # unexpose a previously exposed solr service
+solr:unlink <service> <app>                        # unlink the solr service from the app
+solr:upgrade <service> [--upgrade-flags...]        # upgrade service <service> to the specified versions
 ```
 
 ## Usage
@@ -141,12 +141,12 @@ dokku solr:list
 
 ```shell
 # usage
-dokku solr:logs <service> [-t|--tail]
+dokku solr:logs <service> [-t|--tail] <tail-num-optional>
 ```
 
 flags:
 
-- `-t|--tail`: do not stop when end of the logs are reached and wait for additional output
+- `-t|--tail [<tail-num>]`: do not stop when end of the logs are reached and wait for additional output
 
 You can tail logs for a particular service:
 
@@ -158,6 +158,12 @@ By default, logs will not be tailed, but you can do this with the --tail flag:
 
 ```shell
 dokku solr:logs lollipop --tail
+```
+
+The default tail setting is to show all logs, but an initial count can also be specified:
+
+```shell
+dokku solr:logs lollipop --tail 5
 ```
 
 ### link the solr service to the app
