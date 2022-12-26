@@ -29,6 +29,7 @@ solr:linked <service> <app>                        # check if the solr service i
 solr:links <service>                               # list all apps linked to the solr service
 solr:list                                          # list all solr services
 solr:logs <service> [-t|--tail] <tail-num-optional> # print the most recent log(s) for this service
+solr:pause <service>                               # pause a running solr service
 solr:promote <service> <app>                       # promote service <service> as SOLR_URL in <app>
 solr:restart <service>                             # graceful shutdown and restart of the solr service container
 solr:start <service>                               # start a previously stopped solr service
@@ -343,10 +344,23 @@ dokku solr:start lollipop
 dokku solr:stop <service>
 ```
 
-Stop the service and the running container:
+Stop the service and removes the running container:
 
 ```shell
 dokku solr:stop lollipop
+```
+
+### pause a running solr service
+
+```shell
+# usage
+dokku solr:pause <service>
+```
+
+Pause the running container for the service:
+
+```shell
+dokku solr:pause lollipop
 ```
 
 ### graceful shutdown and restart of the solr service container
