@@ -3,7 +3,8 @@ _DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export SOLR_IMAGE=${SOLR_IMAGE:="$(awk -F '[ :]' '{print $2}' "${_DIR}/Dockerfile")"}
 export SOLR_IMAGE_VERSION=${SOLR_IMAGE_VERSION:="$(awk -F '[ :]' '{print $3}' "${_DIR}/Dockerfile")"}
 export SOLR_ROOT=${SOLR_ROOT:="$DOKKU_LIB_ROOT/services/solr"}
-export SOLR_HOST_ROOT=${SOLR_HOST_ROOT:=$SOLR_ROOT}
+export DOKKU_LIB_HOST_ROOT=${DOKKU_LIB_HOST_ROOT:=$DOKKU_LIB_ROOT}
+export SOLR_HOST_ROOT=${SOLR_HOST_ROOT:="$DOKKU_LIB_HOST_ROOT/services/solr"}
 
 export PLUGIN_UNIMPLEMENTED_SUBCOMMANDS=("backup" "backup-auth" "backup-deauth" "backup-schedule" "backup-schedule-cat" "backup-set-encryption" "backup-unschedule" "backup-unset-encryption" "clone" "connect" "export" "import")
 export PLUGIN_COMMAND_PREFIX="solr"
