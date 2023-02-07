@@ -32,6 +32,7 @@ solr:logs <service> [-t|--tail] <tail-num-optional> # print the most recent log(
 solr:pause <service>                               # pause a running solr service
 solr:promote <service> <app>                       # promote service <service> as SOLR_URL in <app>
 solr:restart <service>                             # graceful shutdown and restart of the solr service container
+solr:set <service> <key> <value>                   # set or clear a property for a service
 solr:start <service>                               # start a previously stopped solr service
 solr:stop <service>                                # stop a running solr service
 solr:unexpose <service>                            # unexpose a previously exposed solr service
@@ -236,6 +237,25 @@ You can unlink a solr service:
 
 ```shell
 dokku solr:unlink lollipop playground
+```
+
+### set or clear a property for a service
+
+```shell
+# usage
+dokku solr:set <service> <key> <value>
+```
+
+Set the network to attach after the service container is started:
+
+```shell
+dokku solr:set lollipop post-create-network custom-network
+```
+
+Unset the post-create-network value:
+
+```shell
+dokku solr:set lollipop post-create-network
 ```
 
 ### Service Lifecycle
