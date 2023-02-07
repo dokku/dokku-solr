@@ -21,7 +21,7 @@ solr-post-extract() {
 
       for f in ${TMPDIR}/solr/*; do
         dokku_log_info1_quiet "Copying $f to $SERVICE solr service"
-        docker cp "$f" "${SERVICE_CONTAINER_ID}:$SERVICE_ROOT/data/${SERVICE}/conf/"
+        docker container cp "$f" "${SERVICE_CONTAINER_ID}:$SERVICE_ROOT/data/${SERVICE}/conf/"
       done
 
       pushd "${SERVICE_ROOT}/data/${SERVICE}/conf/" >/dev/null
