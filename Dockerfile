@@ -1,1 +1,1 @@
-FROM solr:9.4.0
+FROM solr:9.4.1
