@@ -498,7 +498,6 @@ List all apps linked to the `lollipop` solr service.
 ```shell
 dokku solr:links lollipop
 ```
-
 ### Backups
 
 Datastore backups are supported via AWS S3 and S3 compatible services like [minio](https://github.com/minio/minio).
