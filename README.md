@@ -4,42 +4,40 @@ Official solr plugin for dokku. Currently defaults to installing [solr 10.0.0](h
 
 ## Requirements
 
-- dokku 0.19.x+
+- dokku 0.35.x+
 - docker 1.8.x
 
 ## Installation
 
 ```shell
-# on 0.19.x+
+# on 0.35.x+
 sudo dokku plugin:install https://github.com/dokku/dokku-solr.git --name solr
 ```
 
 ## Commands
 
 ```
-solr:app-links <app>                               # list all solr service links for a given app
-solr:backup-set-public-key-encryption <service> <public-key-id> # set GPG Public Key encryption for all future backups of solr service
-solr:backup-unset-public-key-encryption <service>  # unset GPG Public Key encryption for future backups of the solr service
-solr:create <service> [--create-flags...]          # create a solr service
-solr:destroy <service> [-f|--force]                # delete the solr service/data/container if there are no links left
-solr:enter <service>                               # enter or run a command in a running solr service container
-solr:exists <service>                              # check if the solr service exists
-solr:expose <service> <ports...>                   # expose a solr service on custom host:port if provided (random port on the 0.0.0.0 interface if otherwise unspecified)
-solr:info <service> [--single-info-flag]           # print the service information
-solr:link <service> <app> [--link-flags...]        # link the solr service to the app
-solr:linked <service> <app>                        # check if the solr service is linked to an app
-solr:links <service>                               # list all apps linked to the solr service
-solr:list                                          # list all solr services
-solr:logs <service> [-t|--tail] <tail-num-optional> # print the most recent log(s) for this service
-solr:pause <service>                               # pause a running solr service
-solr:promote <service> <app>                       # promote service <service> as SOLR_URL in <app>
-solr:restart <service>                             # graceful shutdown and restart of the solr service container
-solr:set <service> <key> <value>                   # set or clear a property for a service
-solr:start <service>                               # start a previously stopped solr service
-solr:stop <service>                                # stop a running solr service
-solr:unexpose <service>                            # unexpose a previously exposed solr service
-solr:unlink <service> <app>                        # unlink the solr service from the app
-solr:upgrade <service> [--upgrade-flags...]        # upgrade service <service> to the specified versions
+solr:app-links [<app>]                          # list all Solr service links for a given app
+solr:create <service> [--create-flags...]       # create a Solr service
+solr:destroy <service> [-f|--force]             # delete the Solr service/data/container if there are no links left
+solr:enter <service>                            # enter or run a command in a running Solr service container
+solr:exists <service>                           # check if the Solr service exists
+solr:expose <service> <ports...>                # expose a Solr service on custom host:port if provided (random port on the 0.0.0.0 interface if otherwise unspecified)
+solr:info <service> [--info-flags...]           # print the service information
+solr:link <service> [<app>] [--link-flags...]   # link the Solr service to the app
+solr:linked <service> [<app>]                   # check if the Solr service is linked to an app
+solr:links <service>                            # list all apps linked to the Solr service
+solr:list                                       # list all Solr services
+solr:logs <service> [-t|--tail [<tail-num>]]    # print the most recent log(s) for this service
+solr:pause <service>                            # pause a running Solr service
+solr:promote <service> [<app>]                  # promote service <service> as SOLR_URL in <app>
+solr:restart <service>                          # graceful shutdown and restart of the Solr service container
+solr:set <service> <key> <value>                # set or clear a property for a service
+solr:start <service>                            # start a previously stopped Solr service
+solr:stop <service>                             # stop a running Solr service
+solr:unexpose <service>                         # unexpose a previously exposed Solr service
+solr:unlink <service> [<app>] [-n|--no-restart] # unlink the Solr service from the app
+solr:upgrade <service> [--upgrade-flags...]     # upgrade service <service> to the specified versions
 ```
 
 ## Usage
@@ -48,7 +46,7 @@ Help for any commands can be displayed by specifying the command as an argument 
 
 ### Basic Usage
 
-### create a solr service
+### create a Solr service
 
 ```shell
 # usage
@@ -57,17 +55,17 @@ dokku solr:create <service> [--create-flags...]
 
 flags:
 
-- `-c|--config-options "--args --go=here"`: extra arguments to pass to the container create command (default: `None`)
-- `-C|--custom-env "USER=alpha;HOST=beta"`: semi-colon delimited environment variables to start the service with
-- `-i|--image IMAGE`: the image name to start the service with
-- `-I|--image-version IMAGE_VERSION`: the image version to start the service with
-- `-m|--memory MEMORY`: container memory limit in megabytes (default: unlimited)
-- `-N|--initial-network INITIAL_NETWORK`: the initial network to attach the service to
-- `-p|--password PASSWORD`: override the user-level service password
-- `-P|--post-create-network NETWORKS`: a comma-separated list of networks to attach the service container to after service creation
-- `-r|--root-password PASSWORD`: override the root-level service password
-- `-S|--post-start-network NETWORKS`: a comma-separated list of networks to attach the service container to after service start
-- `-s|--shm-size SHM_SIZE`: override shared memory size for solr docker container
+- `-c|--config-options <string>`: extra arguments to pass to the container create command
+- `-C|--custom-env <string>`: semi-colon delimited environment variables to start the service with
+- `-i|--image <string>`: the image name to start the service with
+- `-I|--image-version <string>`: the image version to start the service with
+- `-N|--initial-network <string>`: the initial network to attach the service to
+- `-m|--memory <int>`: container memory limit in megabytes (default: unlimited)
+- `-p|--password <string>`: override the user-level service password
+- `-P|--post-create-network <strings>`: a comma-separated list of networks to attach the service container to after service creation
+- `-S|--post-start-network <strings>`: a comma-separated list of networks to attach the service container to after service start
+- `-r|--root-password <string>`: override the root-level service password
+- `-s|--shm-size <string>`: override shared memory size for the service docker container
 
 Create a solr service named lollipop:
 
@@ -79,7 +77,7 @@ You can also specify the image and image version to use for the service. It *mus
 
 ```shell
 export SOLR_IMAGE="solr"
-export SOLR_IMAGE_VERSION="${PLUGIN_IMAGE_VERSION}"
+export SOLR_IMAGE_VERSION="10.0.0"
 dokku solr:create lollipop
 ```
 
@@ -90,11 +88,28 @@ export SOLR_CUSTOM_ENV="USER=alpha;HOST=beta"
 dokku solr:create lollipop
 ```
 
+### delete the Solr service/data/container if there are no links left
+
+```shell
+# usage
+dokku solr:destroy <service> [-f|--force]
+```
+
+flags:
+
+- `-f|--force`: force the destruction of the service
+
+Destroy the service, it's data, and the running container:
+
+```shell
+dokku solr:destroy lollipop
+```
+
 ### print the service information
 
 ```shell
 # usage
-dokku solr:info <service> [--single-info-flag]
+dokku solr:info <service> [--info-flags...]
 ```
 
 flags:
@@ -104,8 +119,8 @@ flags:
 - `--dsn`: show the service DSN
 - `--exposed-ports`: show service exposed ports
 - `--id`: show the service container id
-- `--internal-ip`: show the service internal ip
 - `--initial-network`: show the initial network being connected to
+- `--internal-ip`: show the service internal ip
 - `--links`: show the service app links
 - `--post-create-network`: show the networks to attach to after service container creation
 - `--post-start-network`: show the networks to attach to after service container start
@@ -137,7 +152,7 @@ dokku solr:info lollipop --status
 dokku solr:info lollipop --version
 ```
 
-### list all solr services
+### list all Solr services
 
 ```shell
 # usage
@@ -154,12 +169,12 @@ dokku solr:list
 
 ```shell
 # usage
-dokku solr:logs <service> [-t|--tail] <tail-num-optional>
+dokku solr:logs <service> [-t|--tail [<tail-num>]]
 ```
 
 flags:
 
-- `-t|--tail [<tail-num>]`: do not stop when end of the logs are reached and wait for additional output
+- `-t|--tail <int>`: tail the logs, optionally showing this many lines
 
 You can tail logs for a particular service:
 
@@ -173,24 +188,24 @@ By default, logs will not be tailed, but you can do this with the --tail flag:
 dokku solr:logs lollipop --tail
 ```
 
-The default tail setting is to show all logs, but an initial count can also be specified:
+By default the last 100 lines are shown, but a different count can be specified:
 
 ```shell
-dokku solr:logs lollipop --tail 5
+dokku solr:logs lollipop --tail=5
 ```
 
-### link the solr service to the app
+### link the Solr service to the app
 
 ```shell
 # usage
-dokku solr:link <service> <app> [--link-flags...]
+dokku solr:link <service> [<app>] [--link-flags...]
 ```
 
 flags:
 
-- `-a|--alias "BLUE_DATABASE"`: an alternative alias to use for linking to an app via environment variable
-- `-q|--querystring "pool=5"`: ampersand delimited querystring arguments to append to the service link
-- `-n|--no-restart "false"`: whether or not to restart the app on link (default: true)
+- `-a|--alias <string>`: an alternative alias to use for the config url exported to the app
+- `-n|--no-restart`: whether to skip restarting the app
+- `-q|--querystring <string>`: ampersand delimited querystring arguments to append to the service url
 
 A solr service can be linked to a container. This will use native docker links via the docker-options plugin. Here we link it to our `playground` app.
 
@@ -214,7 +229,7 @@ DOKKU_SOLR_LOLLIPOP_PORT_8983_TCP_ADDR=172.17.0.1
 The following will be set on the linked application by default:
 
 ```
-SOLR_URL=http://dokku-solr-lollipop:8983/solr/lollipop
+SOLR_URL=http://:SOME_PASSWORD@dokku-solr-lollipop:8983
 ```
 
 The host exposed here only works internally in docker containers. If you want your container to be reachable from outside, you should use the `expose` subcommand. Another service can be linked to your app:
@@ -233,19 +248,19 @@ dokku solr:link lollipop playground
 This will cause `SOLR_URL` to be set as:
 
 ```
-http2://dokku-solr-lollipop:8983/solr/lollipop
+http2://:SOME_PASSWORD@dokku-solr-lollipop:8983
 ```
 
-### unlink the solr service from the app
+### unlink the Solr service from the app
 
 ```shell
 # usage
-dokku solr:unlink <service> <app>
+dokku solr:unlink <service> [<app>] [-n|--no-restart]
 ```
 
 flags:
 
-- `-n|--no-restart "false"`: whether or not to restart the app on unlink (default: true)
+- `-n|--no-restart`: whether to skip restarting the app
 
 You can unlink a solr service:
 
@@ -280,11 +295,17 @@ Unset the post-create-network value:
 dokku solr:set lollipop post-create-network
 ```
 
+Set the keyserver a public key for backup encryption is fetched from:
+
+```shell
+dokku solr:set lollipop backup-keyserver hkp://keys.example.com
+```
+
 ### Service Lifecycle
 
 The lifecycle of each service can be managed through the following commands:
 
-### enter or run a command in a running solr service container
+### enter or run a command in a running Solr service container
 
 ```shell
 # usage
@@ -305,7 +326,7 @@ You may also run a command directly against the service. Filesystem changes will
 dokku solr:enter lollipop touch /tmp/test
 ```
 
-### expose a solr service on custom host:port if provided (random port on the 0.0.0.0 interface if otherwise unspecified)
+### expose a Solr service on custom host:port if provided (random port on the 0.0.0.0 interface if otherwise unspecified)
 
 ```shell
 # usage
@@ -324,7 +345,7 @@ Expose the service on the service's normal ports, with the first on a specified 
 dokku solr:expose lollipop 127.0.0.1:8983
 ```
 
-### unexpose a previously exposed solr service
+### unexpose a previously exposed Solr service
 
 ```shell
 # usage
@@ -341,13 +362,13 @@ dokku solr:unexpose lollipop
 
 ```shell
 # usage
-dokku solr:promote <service> <app>
+dokku solr:promote <service> [<app>]
 ```
 
 If you have a solr service linked to an app and try to link another solr service another link environment variable will be generated automatically:
 
 ```
-DOKKU_SOLR_BLUE_URL=http://other_service:ANOTHER_PASSWORD@dokku-solr-other-service:8983/other_service
+DOKKU_SOLR_BLUE_URL=http://:ANOTHER_PASSWORD@dokku-solr-other-service:8983/other_service
 ```
 
 You can promote the new service to be the primary one:
@@ -361,12 +382,12 @@ dokku solr:promote other_service playground
 This will replace `SOLR_URL` with the url from other_service and generate another environment variable to hold the previous value if necessary. You could end up with the following for example:
 
 ```
-SOLR_URL=http://other_service:ANOTHER_PASSWORD@dokku-solr-other-service:8983/other_service
-DOKKU_SOLR_BLUE_URL=http://other_service:ANOTHER_PASSWORD@dokku-solr-other-service:8983/other_service
-DOKKU_SOLR_SILVER_URL=http://lollipop:SOME_PASSWORD@dokku-solr-lollipop:8983/lollipop
+SOLR_URL=http://:ANOTHER_PASSWORD@dokku-solr-other-service:8983/other_service
+DOKKU_SOLR_BLUE_URL=http://:ANOTHER_PASSWORD@dokku-solr-other-service:8983/other_service
+DOKKU_SOLR_SILVER_URL=http://:SOME_PASSWORD@dokku-solr-lollipop:8983/lollipop
 ```
 
-### start a previously stopped solr service
+### start a previously stopped Solr service
 
 ```shell
 # usage
@@ -379,7 +400,7 @@ Start the service:
 dokku solr:start lollipop
 ```
 
-### stop a running solr service
+### stop a running Solr service
 
 ```shell
 # usage
@@ -392,7 +413,7 @@ Stop the service and removes the running container:
 dokku solr:stop lollipop
 ```
 
-### pause a running solr service
+### pause a running Solr service
 
 ```shell
 # usage
@@ -405,7 +426,7 @@ Pause the running container for the service:
 dokku solr:pause lollipop
 ```
 
-### graceful shutdown and restart of the solr service container
+### graceful shutdown and restart of the Solr service container
 
 ```shell
 # usage
@@ -427,15 +448,15 @@ dokku solr:upgrade <service> [--upgrade-flags...]
 
 flags:
 
-- `-c|--config-options "--args --go=here"`: extra arguments to pass to the container create command (default: `None`)
-- `-C|--custom-env "USER=alpha;HOST=beta"`: semi-colon delimited environment variables to start the service with
-- `-i|--image IMAGE`: the image name to start the service with
-- `-I|--image-version IMAGE_VERSION`: the image version to start the service with
-- `-N|--initial-network INITIAL_NETWORK`: the initial network to attach the service to
-- `-P|--post-create-network NETWORKS`: a comma-separated list of networks to attach the service container to after service creation
-- `-R|--restart-apps "true"`: whether or not to force an app restart (default: false)
-- `-S|--post-start-network NETWORKS`: a comma-separated list of networks to attach the service container to after service start
-- `-s|--shm-size SHM_SIZE`: override shared memory size for solr docker container
+- `-c|--config-options <string>`: extra arguments to pass to the container create command
+- `-C|--custom-env <string>`: semi-colon delimited environment variables to start the service with
+- `-i|--image <string>`: the image to upgrade the service to
+- `-I|--image-version <string>`: the image version to upgrade the service to
+- `-N|--initial-network <string>`: the initial network to attach the service to
+- `-P|--post-create-network <strings>`: a comma-separated list of networks to attach the service container to after service creation
+- `-S|--post-start-network <strings>`: a comma-separated list of networks to attach the service container to after service start
+- `-R|--restart-apps`: whether to stop and start the linked apps around the upgrade
+- `-s|--shm-size <string>`: override shared memory size for the service docker container
 
 You can upgrade an existing service to a new image or image-version:
 
@@ -447,11 +468,11 @@ dokku solr:upgrade lollipop
 
 Service scripting can be executed using the following commands:
 
-### list all solr service links for a given app
+### list all Solr service links for a given app
 
 ```shell
 # usage
-dokku solr:app-links <app>
+dokku solr:app-links [<app>]
 ```
 
 List all solr services that are linked to the `playground` app.
@@ -460,7 +481,7 @@ List all solr services that are linked to the `playground` app.
 dokku solr:app-links playground
 ```
 
-### check if the solr service exists
+### check if the Solr service exists
 
 ```shell
 # usage
@@ -473,11 +494,11 @@ Here we check if the lollipop solr service exists.
 dokku solr:exists lollipop
 ```
 
-### check if the solr service is linked to an app
+### check if the Solr service is linked to an app
 
 ```shell
 # usage
-dokku solr:linked <service> <app>
+dokku solr:linked <service> [<app>]
 ```
 
 Here we check if the lollipop solr service is linked to the `playground` app.
@@ -486,7 +507,7 @@ Here we check if the lollipop solr service is linked to the `playground` app.
 dokku solr:linked lollipop playground
 ```
 
-### list all apps linked to the solr service
+### list all apps linked to the Solr service
 
 ```shell
 # usage
@@ -497,45 +518,6 @@ List all apps linked to the `lollipop` solr service.
 
 ```shell
 dokku solr:links lollipop
-```
-### Backups
-
-Datastore backups are supported via AWS S3 and S3 compatible services like [minio](https://github.com/minio/minio).
-
-You may skip the `backup-auth` step if your dokku install is running within EC2 and has access to the bucket via an IAM profile. In that case, use the `--use-iam` option with the `backup` command.
-
-If both passphrase and public key forms of encryption are set, the public key encryption will take precedence.
-
-The underlying core backup script is present [here](https://github.com/dokku/docker-s3backup/blob/main/backup.sh).
-
-Backups can be performed using the backup commands:
-
-### set GPG Public Key encryption for all future backups of solr service
-
-```shell
-# usage
-dokku solr:backup-set-public-key-encryption <service> <public-key-id>
-```
-
-Set the `GPG` Public Key for encrypting backups:
-
-```shell
-dokku solr:backup-set-public-key-encryption lollipop
-```
-
-This method currently requires the <public-key-id> to be present on the keyserver `keyserver.ubuntu.com`:
-
-### unset GPG Public Key encryption for future backups of the solr service
-
-```shell
-# usage
-dokku solr:backup-unset-public-key-encryption <service>
-```
-
-Unset the `GPG` Public Key encryption for backups:
-
-```shell
-dokku solr:backup-unset-public-key-encryption lollipop
 ```
 
 ### Disabling `docker image pull` calls

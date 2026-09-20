@@ -1,0 +1,78 @@
+---
+services:
+  solr:
+    image: "{{ .Image }}:{{ .ImageVersion }}"
+
+    # solr-precreate makes the core the service is named for, then starts solr.
+    # The user's config options follow it, as they do for every datastore.
+    command:
+      - solr-precreate
+      - "{{ .Database }}"
+
+    volumes:
+      # solr moved its cores here in eight, and has kept them here since
+      - type: bind
+        source: "{{ .HostRoot }}/data"
+        target: /var/solr/data
+
+    ports:
+      - name: native
+        target: 8983
+        primary: true
+
+x-dokku:
+  plugin: solr
+  title: Solr
+
+  # http rather than solr: a linked app talks to it over http, which is the
+  # scheme the bash plugin has always handed over
+  scheme: http
+  alias: SOLR
+
+  # the path carries a literal solr segment before the core name, which is
+  # where solr serves a core from
+  dsn: "{{ .Scheme }}://{{ .Host }}:{{ .Port.native }}/solr/{{ .Database }}"
+
+  wait: native
+
+  hooks:
+    pre_create:
+      # solr runs as its own user and will not write a directory it does not
+      # own. The bash plugin chowns from the host, which needs a sudo grant
+      # every datastore's sudoers file carries whether or not it is solr; doing
+      # it from a container needs no grant at all.
+      user: "0"
+      entrypoint: ""
+      volumes:
+        - type: bind
+          source: "{{ .HostRoot }}/data"
+          target: /seed
+      exec: ["chown", "-R", "8983:8983", "/seed"]
+
+  triggers:
+    # dokku hands this the app, the directory its build was extracted to, and
+    # the revision. It runs once for each service the app is linked to, so the
+    # definition only has to say what to do with one of them.
+    post-extract:
+      # on the host, because the build it reads from is a directory on the host
+      # and the core it writes to is the host side of a bind mount
+      mode: host
+      arguments:
+        - name: app
+          description: the app being deployed
+        - name: directory
+          description: the directory the build was extracted to
+        - name: revision
+          description: the revision being deployed
+          optional: true
+      exec:
+        - post-extract
+        - "{{ .Args.directory }}"
+      env:
+        SOLR_CONF: "{{ .ServiceRoot }}/data/{{ .Database }}/conf"
+        SOLR_HOST_CONF: "{{ .HostRoot }}/data/{{ .Database }}/conf"
+        SOLR_IMAGE: "{{ .TaggedImage }}"
+        SOLR_SERVICE: "{{ .ServiceName }}"
+
+  # no commands: the bash plugin implements none of connect, export or import,
+  # so clone and the backup family are unavailable too

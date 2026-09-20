@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Puts an app's solr configuration into the core its service serves.
+#
+# An app may carry a solr/ directory in its build, whose contents belong in the
+# core's conf directory. The core lives in the service's data directory, which
+# is a bind mount, so this writes to the host side of it and never has to know
+# where the image mounts it - a path that differs between solr 7 and 8.
+set -eo pipefail
+
+DIRECTORY="${1:?the build directory is passed by the definition}"
+CONF="${SOLR_CONF:?the conf directory is passed by the definition}"
+HOST_CONF="${SOLR_HOST_CONF:?the conf directory as dockerd sees it is passed by the definition}"
+IMAGE="${SOLR_IMAGE:?the service image is passed by the definition}"
+SERVICE="${SOLR_SERVICE:?the service name is passed by the definition}"
+
+# an app that ships no configuration has nothing to do here, which is the usual
+# case for every app that is not a solr app
+[[ -d "$DIRECTORY/solr" ]] || exit 0
+
+if [[ ! -d "$CONF" ]]; then
+  echo "       $SERVICE has no core to configure yet, skipping" >&2
+  exit 0
+fi
+
+echo "       Copying solr configuration into $SERVICE"
+cp -R "$DIRECTORY/solr/." "$CONF/"
+
+# solr runs as its own user and will not read a file it does not own. Doing it
+# from a container that is already root needs no sudo grant on the host, which
+# is what every datastore's sudoers file used to carry whether it was solr or
+# not.
+docker container run --rm --user 0 --entrypoint chown \
+  --volume "$HOST_CONF:/conf" "$IMAGE" -R 8983:8983 /conf
