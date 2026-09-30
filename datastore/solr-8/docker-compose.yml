@@ -10,7 +10,10 @@ services:
       - "{{ .Database }}"
 
     volumes:
-      # solr moved its cores here in eight, and has kept them here since
+      # solr moved its cores here in eight, and has kept them here since. The
+      # image declares all of /var/solr a volume, so the rest of it - solr's
+      # logs and its log4j2.xml - lands in an anonymous volume that a rebuild
+      # leaves behind. None of it is data
       - type: bind
         source: "{{ .HostRoot }}/data"
         target: /var/solr/data
