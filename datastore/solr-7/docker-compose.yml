@@ -75,5 +75,17 @@ x-dokku:
         SOLR_IMAGE: "{{ .TaggedImage }}"
         SOLR_SERVICE: "{{ .ServiceName }}"
 
-  # no commands: the bash plugin implements none of connect, export or import,
-  # so clone and the backup family are unavailable too
+  # no connect, export or import: the bash plugin implements none of them, so
+  # clone and the backup family are unavailable too
+  commands:
+    # the core's index rather than the core. Its conf holds the schema an app's
+    # deploy copied in, which a core made again would lose until the next deploy,
+    # and solr makes the index again empty when it loads a core without one.
+    # Offline, since deleting the files from under a running index is not safe,
+    # and as root with the entrypoint cleared, for the same reasons the pre
+    # create hook is.
+    reset:
+      mode: offline
+      user: "0"
+      entrypoint: ""
+      exec: ["rm", "-rf", "{{ .Target.data }}/{{ .Database }}/data"]
