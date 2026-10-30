@@ -36,6 +36,39 @@ x-dokku:
 
   wait: native
 
+  # the cores a service holds beside its own, a database being a core here as
+  # it is in the dsn. Each is made in the data volume, where the service's own
+  # is, with a copy of the configset solr ships, so that it is found again when
+  # solr starts and is kept when the service is rebuilt. Made through the core
+  # admin api rather than the solr script, whose create_core puts a core in
+  # solr's home, which is not the data volume before eight. The configset is
+  # copied rather than named, since the api looks for one under solr's home
+  # rather than where the image ships them. The same text as the other solr
+  # definition's, which a test holds them to.
+  databases:
+    create:
+      exec:
+        - sh
+        - -c
+        - |
+          set -e
+          mkdir -p "$2/$1"
+          cp -r /opt/solr/server/solr/configsets/_default/conf "$2/$1/conf"
+          if ! reply="$(wget -q --content-on-error -O - "http://localhost:8983/solr/admin/cores?action=CREATE&name=$1&instanceDir=$2/$1")"; then
+            printf '%s\n' "$reply" >&2
+            exit 1
+          fi
+        - dokku-solr-create-database
+        - "{{ .Args.database }}"
+        - "{{ .Target.data }}"
+    destroy:
+      exec:
+        - sh
+        - -c
+        - wget -q -O /dev/null "http://localhost:8983/solr/admin/cores?action=UNLOAD&core=$1&deleteInstanceDir=true"
+        - dokku-solr-destroy-database
+        - "{{ .Args.database }}"
+
   hooks:
     pre_create:
       # solr runs as its own user and will not write a directory it does not
