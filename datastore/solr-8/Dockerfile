@@ -1,1 +1,1 @@
-FROM solr:10.0.0
+FROM solr:10.1.0
